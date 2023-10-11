@@ -1,0 +1,131 @@
+﻿<Window x:Class="TeachersWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeachersWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:ServiceToColorConverter x:Key="ServiceToColorConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="0"
+                  Header="Teachers Uni"
+                  BorderThickness="2"
+                  Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <ListView Grid.Row="0" ItemsSource="{Binding Teachers}" SelectedItem="{Binding SelectedTeacher}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="3" BorderThickness="2"
+                                    BorderBrush="SteelBlue" CornerRadius="4" Width="180">
+                                <Grid Margin="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock FontWeight="Bold" Text="{Binding FullName}"/>
+                                    <TextBlock Grid.Row="1" Text="{Binding Institute.Name}"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1"
+                                               Grid.RowSpan="2"
+                                               TextAlignment="Center"
+                                               Text="{Binding Service.Name}"
+                                               Background="{Binding Service.Name, Converter={StaticResource ServiceToColorConverter}}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                  <Button  MaxHeight="27" Margin="5"
+                           MaxWidth="150"
+                           Content="Top 3 ===>"
+                           Command="{Binding GetTopServicesCommand}"/>
+                  <Button  MaxHeight="27" MaxWidth="200" 
+                           Margin="5" 
+                           Content="Change UniName"
+                           Command="{Binding ChangeNameCommand}"/>
+                  <Button  MaxHeight="27" MaxWidth="200" 
+                           Margin="5" 
+                           Content="Delete Teacher"
+                           Command="{Binding DeleteTeacherCommand}"/>
+
+
+                </StackPanel>
+                
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox
+                Margin="5"
+                BorderThickness="3"
+                Header="New Teacher added">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Label Content="FullName" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label Content="Uni" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Label Content="Service" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                   
+                    <TextBox Grid.Row="0" Grid.Column="1" MaxHeight="27" Margin="5" BorderThickness="2"
+                         Text="{Binding NewTeacher.FullName, UpdateSourceTrigger=PropertyChanged}"/>
+                    
+                    <ComboBox Grid.Row="1" Grid.Column="1" MaxHeight="27" Margin="5" BorderThickness="2"
+                              SelectedItem="{Binding NewTeacher.Institute}"
+                              ItemsSource="{Binding Institutes}" DisplayMemberPath="Name"/>
+                    
+                    <ComboBox Grid.Row="2" Grid.Column="1" MaxHeight="27" Margin="5" BorderThickness="2"
+                              SelectedItem="{Binding NewTeacher.Service}"
+                              ItemsSource="{Binding Services}" DisplayMemberPath="Name"/>
+                    
+                    <Button Grid.Column="0" Grid.Row="3" MaxHeight="27" Margin="5" Content="Added"
+                              Command="{Binding AddTeacherCommand}" />
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Row="1"
+                Margin="5"
+                BorderThickness="3"
+                Header="Top 3">
+                <ListView BorderThickness="3" ItemsSource="{Binding TopServices}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/> 
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding ServiceName}" MinWidth="100"/>
+                                <TextBlock Grid.Column="1" Text="{Binding CountOfUsing}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
